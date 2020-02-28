@@ -30,18 +30,18 @@ class WebPipeline(object):
             return date
     
     def process_item(self, item, spider):
-        if isinstance(item, WeiboItem):
+        if isinstance(item, AnswerItem):
             if item.get('created_at'):
                 item['created_at'] = item['created_at'].strip()
                 item['created_at'] = self.parse_time(item.get('created_at'))
-            if item.get('pictures'):
-                item['pictures'] = [pic.get('url') for pic in item.get('pictures')]
+            # if item.get('pictures'):
+            #     item['pictures'] = [pic.get('url') for pic in item.get('pictures')]
         return item
 
 
 class TimePipeline():
     def process_item(self, item, spider):
-        if isinstance(item, UserItem) or isinstance(item, WeiboItem):
+        if isinstance(item, UserItem) or isinstance(item, AnswerItem):
             now = time.strftime('%Y-%m-%d %H:%M', time.localtime())
             item['crawled_at'] = now
         return item
@@ -63,13 +63,13 @@ class MongoPipeline(object):
         self.client = pymongo.MongoClient(self.mongo_uri)
         self.db = self.client[self.mongo_db]
         self.db[UserItem.collection].create_index([('id', pymongo.ASCENDING)])
-        self.db[WeiboItem.collection].create_index([('id', pymongo.ASCENDING)])
+        self.db[AnswerItem.collection].create_index([('id', pymongo.ASCENDING)])
     
     def close_spider(self, spider):
         self.client.close()
     
     def process_item(self, item, spider):
-        if isinstance(item, UserItem) or isinstance(item, WeiboItem):
+        if isinstance(item, UserItem) or isinstance(item, AnswerItem):
             self.db[item.collection].update({'id': item.get('id')}, {'$set': item}, True)
         if isinstance(item, UserRelationItem):
             self.db[item.collection].update(

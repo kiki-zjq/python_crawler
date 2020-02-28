@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for web project
+# Scrapy settings for getCookies project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,28 +9,18 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'web'
+BOT_NAME = 'getCookies'
 
-SPIDER_MODULES = ['web.spiders']
-NEWSPIDER_MODULE = 'web.spiders'
+SPIDER_MODULES = ['getCookies.spiders']
+NEWSPIDER_MODULE = 'getCookies.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'web (+http://www.yourdomain.com)'
+#USER_AGENT = 'getCookies (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
-DEFAULT_REQUEST_HEADERS = {
-    'Accept': 'application/json, text/plain, */*',
-    'Accept-Encoding': 'gzip, deflate, sdch',
-    'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4,zh-TW;q=0.2,mt;q=0.2',
-    'Connection': 'keep-alive',
-    'Host':'www.zhihu.com',
-    ':authority': 'www.zhihu.com',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
-    'X-Requested-With': 'XMLHttpRequest',
-}
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -57,15 +47,14 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'web.middlewares.WebSpiderMiddleware': 543,
+#    'getCookies.middlewares.GetcookiesSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'web.middlewares.CookiesMiddleware': 599,#scrapy内置的优先级为700
-# #   'web.middlewares.ProxyMiddleware':699,#scrapy内置的优先级为750
-# }
+#DOWNLOADER_MIDDLEWARES = {
+#    'getCookies.middlewares.GetcookiesDownloaderMiddleware': 543,
+#}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -75,12 +64,9 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    'web.pipelines.TimePipeline': 300,
-    'web.pipelines.WebPipeline': 301,
-    'web.pipelines.MongoPipeline': 302,
-}
-
+#ITEM_PIPELINES = {
+#    'getCookies.pipelines.GetcookiesPipeline': 300,
+#}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -102,15 +88,3 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-
-MONGO_URI = 'localhost'
-
-MONGO_DATABASE = 'zhihu'
-
-COOKIES_URL = 'http://localhost:5000/zhihu/random'
-
-PROXY_URL = 'http://localhost:5555/random'
-
-RETRY_HTTP_CODES = [401, 403, 408, 414, 500, 502, 503, 504]
-RETRY_TIMES = 5

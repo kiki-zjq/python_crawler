@@ -2,10 +2,10 @@ import json
 from scrapy import Request, Spider
 from web.items import *
 
-class WeiboSpider(Spider):
-    name = 'weiboSpider'
+class ZhihuSpider(Spider):
+    name = 'zhihuSpider'
 
-    allowed_domains = ['m.weibo.cn']
+    allowed_domains = ['zhihu.com']
     
     # 用户链接
     user_url = 'https://m.weibo.cn/api/container/getIndex?uid={uid}&type=uid&value={uid}&containerid=100505{uid}'
@@ -16,6 +16,15 @@ class WeiboSpider(Spider):
     # 微博链接
     weibo_url = 'https://m.weibo.cn/api/container/getIndex?uid={uid}&type=uid&page={page}&containerid=107603{uid}'
     
+    # 问答链接 page的值是20的倍数
+    answer_url ='https://www.zhihu.com/api/v4/members/{user}/answers?include=data&offset={page}&limit=20&sort_by=created'
+
+    # 关注链接
+    follow_url ='https://www.zhihu.com/api/v4/members/{user}/followees?include=data&offset={page}&limit=20'
+
+    # 粉丝链接
+    fan_url = 'https://www.zhihu.com/api/v4/members/{user}/followers?include=data&offset={page}&limit=20'
+
     start_users = ['5796662600']
     # 吴宣仪微博
 

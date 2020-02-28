@@ -8,6 +8,9 @@
 from scrapy import signals
 import json
 import requests
+import logging
+import random
+import time
 
 # class WebSpiderMiddleware(object):
 #     # Not all methods need to be defined. If a method is not defined,
@@ -106,7 +109,7 @@ import requests
 class ProxyMiddleware():
 
     def __init__(self, proxy_url):
-        
+        self.logger = logging.getLogger(__name__)
         self.proxy_url = proxy_url
     
     def get_random_proxy(self):
@@ -123,7 +126,7 @@ class ProxyMiddleware():
             proxy = self.get_random_proxy()
             if proxy:
                 uri = 'https://{proxy}'.format(proxy=proxy)
-                #self.logger.debug('???? ' + proxy)
+                self.logger.debug('??? ' + proxy)
                 request.meta['proxy'] = uri
 
     @classmethod
@@ -136,26 +139,33 @@ class ProxyMiddleware():
 
 class CookiesMiddleware():
 
-    def __init__(self, cookies_url):
-        self.cookies_url = cookies_url
-    
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        pass
+
     def get_random_cookies(self):
-        try:
-            response = requests.get(self.cookies_url)
-            if response.status_code == 200:
-                cookies = json.loads(response.text)
-                return cookies
-        except requests.ConnectionError:
-            return False
+
+        with open('zhihuCookies.json','r',encoding='utf-8') as f:
+            listcookies=json.loads(f.read()) # ??cookies
+        cookies_dict = dict()
+        for cookie in listcookies:
+            # ????dict????????cookies??name?value??domain????????
+            cookies_dict[cookie['name']] = cookie['value']
+        rand = random.sample(cookies_dict.keys(),1)
+        cookie={}
+        cookie[rand[0]] = cookies_dict[rand[0]]
+        print(cookie)
+        time.sleep(5)
+        return cookie
+        # try:
+        #     response = requests.get(self.cookies_url)
+        #     if response.status_code == 200:
+        #         cookies = json.loads(response.text)
+        #         return cookies
+        # except requests.ConnectionError:
+        #     return False
     
     def process_request(self, request, spider):
-        cookies = self.get_random_cookies()
-        if cookies:
-            request.cookies = cookies
+        self.logger.debug('Change Cookies')
+        request.headers.setdefault('cookies',self.get_random_cookies())
            
-    @classmethod
-    def from_crawler(cls, crawler):
-        settings = crawler.settings
-        return cls(
-            cookies_url=settings.get('COOKIES_URL')
-        )
