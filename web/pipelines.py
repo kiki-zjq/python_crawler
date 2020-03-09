@@ -12,30 +12,24 @@ import re, time
 from web.items import *
 
 class WebPipeline(object):
-    def process_item(self, item, spider):
-        def parse_time(self, date):
-            if re.match('刚刚', date):
-                date = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
-            if re.match('\d+分钟前', date):
-                minute = re.match('(\d+)', date).group(1)
-                date = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time() - float(minute) * 60))
-            if re.match('\d+小时前', date):
-                hour = re.match('(\d+)', date).group(1)
-                date = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time() - float(hour) * 60 * 60))
-            if re.match('昨天.*', date):
-                date = re.match('昨天(.*)', date).group(1).strip()
-                date = time.strftime('%Y-%m-%d', time.localtime() - 24 * 60 * 60) + ' ' + date
-            if re.match('\d{2}-\d{2}', date):
-                date = time.strftime('%Y-', time.localtime()) + date + ' 00:00'
-            return date
+
+    def parse_time(self, date):
+        dateArray = time.localtime(date)
+        formalTime = time.strftime("%Y-%m-%d %H:%M:%S",dateArray)
+        return formalTime
     
     def process_item(self, item, spider):
         if isinstance(item, AnswerItem):
-            if item.get('created_at'):
-                item['created_at'] = item['created_at'].strip()
-                item['created_at'] = self.parse_time(item.get('created_at'))
-            # if item.get('pictures'):
-            #     item['pictures'] = [pic.get('url') for pic in item.get('pictures')]
+            if item.get('question_created'):
+                item['question_created'] = self.parse_time(item.get('question_created'))
+            if item.get('question_updated'):
+                item['question_updated'] = self.parse_time(item.get('question_updated'))
+            if item.get('answer_created'):
+                item['answer_created'] = self.parse_time(item.get('answer_created'))
+            if item.get('answer_updated'):
+                item['answer_updated'] = self.parse_time(item.get('answer_updated'))
+
+            
         return item
 
 

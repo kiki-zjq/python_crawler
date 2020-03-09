@@ -62,10 +62,9 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'web.middlewares.CookiesMiddleware': 599,#scrapy内置的优先级为700
-# #   'web.middlewares.ProxyMiddleware':699,#scrapy内置的优先级为750
-# }
+DOWNLOADER_MIDDLEWARES = {
+   'web.middlewares.ProxyMiddleware':699,#scrapy内置的优先级为750
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -106,9 +105,9 @@ ITEM_PIPELINES = {
 
 MONGO_URI = 'localhost'
 
+# MONGO_URI = 'mongodb+srv://web_student:web-password@cluster0-mlkbo.mongodb.net/test?retryWrites=true&w=majority'
 MONGO_DATABASE = 'zhihu'
 
-COOKIES_URL = 'http://localhost:5000/zhihu/random'
 
 PROXY_URL = 'http://localhost:5555/random'
 
