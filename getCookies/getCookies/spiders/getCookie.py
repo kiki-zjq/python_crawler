@@ -73,8 +73,9 @@ class ZhihuSpider(scrapy.Spider):
         # 把获取的cookies处理成dict类型
         cookies_dict = dict()
         for cookie in listcookies:
+            if cookie['expiry']:
             # 在保存成dict时，我们其实只要cookies中的name和value，而domain等其他都可以不要
-            cookies_dict[cookie['name']] = cookie['value']
+                cookies_dict[cookie['name']] = cookie['value']
         print("show cookies!!!!!!!!!!!!!!!!!!11")
         rand = random.sample(cookies_dict.keys(),1)
         print(cookies_dict)
